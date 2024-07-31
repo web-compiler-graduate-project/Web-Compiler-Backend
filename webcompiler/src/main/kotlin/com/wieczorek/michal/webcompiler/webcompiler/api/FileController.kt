@@ -4,11 +4,13 @@ import com.wieczorek.michal.webcompiler.webcompiler.api.request.CompilationReque
 import com.wieczorek.michal.webcompiler.webcompiler.api.response.CompilationResponse
 import com.wieczorek.michal.webcompiler.webcompiler.service.FileCompilationPerformerService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api")
 class FileController(
