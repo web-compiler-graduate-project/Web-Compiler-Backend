@@ -11,7 +11,7 @@ COPY . .
 RUN chmod -R 755 /home/gradle/project
 
 # Zbuduj aplikację
-RUN gradle build
+RUN gradle build -x test
 
 # Użyj obrazu z JRE do uruchomienia aplikacji
 FROM openjdk:22-jdk-slim

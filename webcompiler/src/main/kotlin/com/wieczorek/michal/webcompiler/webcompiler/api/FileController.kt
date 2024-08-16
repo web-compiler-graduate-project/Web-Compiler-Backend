@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api")
 class FileController(
-
     @Autowired val fileCompilationPerformerService: FileCompilationPerformerService
-
 ) {
 
     @PostMapping
