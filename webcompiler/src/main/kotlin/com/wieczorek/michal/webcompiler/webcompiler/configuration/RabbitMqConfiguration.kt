@@ -1,7 +1,7 @@
 package com.wieczorek.michal.webcompiler.webcompiler.configuration
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.wieczorek.michal.webcompiler.webcompiler.api.response.CompilationResponse
+import com.wieczorek.michal.webcompiler.webcompiler.configuration.response.CompilationResponse
 import com.wieczorek.michal.webcompiler.webcompiler.service.FileCompilationPerformerService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -51,7 +51,7 @@ open class RabbitMQConfiguration(
     @Bean
     open fun rabbitTemplate(connectionFactory: ConnectionFactory): RabbitTemplate {
         val template = RabbitTemplate(connectionFactory)
-        template.setExchange("rpc_exchange") // Default exchange for sending messages
+        template.setExchange("rpc_exchange")
         return template
     }
 
@@ -70,13 +70,11 @@ open class RabbitMQConfiguration(
             logger.info("Received message with correlationId: $correlationId")
 
             try {
-                // Perform file compilation
                 val result = fileCompilationPerformerService.performFileCompilation(file)
                 val mapper = jacksonObjectMapper()
                 logger.info("File: $file")
                 logger.info("Output: $result")
 
-                // Stwórz właściwości wiadomości z ustawionym Correlation ID
                 val messageProperties = org.springframework.amqp.core.MessageProperties().apply {
                     this.correlationId = correlationId
                 }
@@ -85,7 +83,6 @@ open class RabbitMQConfiguration(
                     messageProperties
                 )
 
-                // Wysłanie odpowiedzi do kolejki replyTo
                 rabbitTemplate.send(rpcExchange().name, replyBinding().routingKey, responseMessage)
 
                 logger.info("Sent response with correlationId: $correlationId to queue: $replyTo")
